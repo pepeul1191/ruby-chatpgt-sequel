@@ -38,6 +38,10 @@ Backup SQLite
 
     $ sqlite3 app.db .dump > dbname.bak
 
+Ubuntu ruby sequel con sqlite3
+
+    $ sudo apt install ruby-dev
+    $ sudo apt install libsqlite3-dev
 
 
 ---
