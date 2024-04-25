@@ -1,0 +1,105 @@
+/*
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:100,300,400");
+*/
+:root {
+  --bg-primary: #343434;
+  --bg-secondary: #454545;
+}
+
+.bg-primary { 
+  background: var(--bg-primary) !important;
+}
+
+.bg-secondary { 
+  background: var(--bg-secondary) !important;
+}
+
+body {
+  background: #F1EFE2;
+}
+
+html {
+  font-size:0.75rem !important;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#workspace{
+  padding: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 75px;
+  background: #FFF;
+  box-shadow: 1px 1px 5px #999;
+}
+
+.btn, .form-control {
+  border-radius: 0px !important;
+}
+
+.form-group > .btn {
+  margin-top: 25px;
+}
+
+footer{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 20px;
+  color: #999;
+  text-align: right;
+}
+
+footer > a {
+  color: #999;
+  font-weight: 800;
+}
+
+.alert {
+  border-radius: 0rem;
+}
+
+#nav1{
+  height: 20px;
+  font-size: 0.90rem;
+  padding-left: 23px;
+  padding-right: 30px;
+}
+
+#nav1 > ul > li{
+  display: inline;
+}
+
+#nav1 > ul > li > a{
+  color: #fdfdfd;
+  font-weight: 400;
+}
+
+#nav1 > ul > li > a:hover{
+  color: #FFF;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+#nav1 > ul > li:first-child {
+  margin-right: 15px;
+}
+
+#nav1 > ul {
+  position: relative;
+  float: left;
+  margin-top: 2px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+#nav2{
+  padding-left: 23px;
+  padding-right: 23px;
+  margin-top: 20px;
+}
+
+.btn > i {
+  margin-right: 5px;
+}

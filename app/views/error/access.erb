@@ -1,0 +1,10 @@
+<div class="row text-center">
+  <h1 class="align-text-bottom"><%=error[:number]%></h1>
+</div>
+<div class="row text-center">
+	<div class="error-divider">
+		<h2><%=error[:message]%></h2>
+		<p class="description"><%=error[:description]%></p>
+	</div>
+	<a href="<%= settings.constants[:base_url] %>login" class="return-btn"><i class="fa fa-home"></i>Ir al Inicio</a>
+</div>
