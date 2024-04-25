@@ -1,0 +1,40 @@
+.row > *{
+  padding-right: 0px; 
+  padding-left: 0px;
+}
+
+.form-container {
+  border: 1px solid #FDBF3B;
+  background-color: #FFEBC1;
+  padding: 40px;
+  border-radius: 0px;
+  width: 353px;
+  padding-bottom: 20px;
+}
+
+body{
+  background-color: #FDFDFD;
+}
+
+.link{
+  text-decoration: none;
+}
+
+.logo-container{
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; 
+}
+
+.logo{
+  height: 150px;
+  width: 150px;
+}
+
+.custom-color path{
+  fill: #FDBF3B;
+}
+
+.icon{
+  font-size: 80px;
+}

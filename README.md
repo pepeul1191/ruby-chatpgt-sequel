@@ -55,9 +55,13 @@ Ejecutar con rerun:
 
     $ rake dev:start
 
-Sinatra Boilerplate:
+Sinatra Boilerplate PP:
 
     https://github.com/pepeul1191/sinatra-boilerplate-4
+
+React PP:
+
+    https://github.com/pepeul1191/react-rollup
 
 ---
 

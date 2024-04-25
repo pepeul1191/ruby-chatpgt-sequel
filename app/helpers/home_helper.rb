@@ -1,5 +1,5 @@
 module Helpers
-  module HomeHelper
+  module LoginHelper
     extend self
     def index_css(constants)
       resp = []

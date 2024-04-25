@@ -1,0 +1,13 @@
+.btn{
+  border-radius: 0px;
+}
+
+.btn > i {
+  margin-right: 10px;
+}
+
+input[type="text"].form-control, 
+input[type="password"].form-control, 
+input[type="email"].form-control { 
+  border-radius: 0px;
+}

@@ -13,3 +13,5 @@ public/dist
 *.ods#
 .env
 *.lock
+public/build
+public/fonts
