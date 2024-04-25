@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
-import { BASE_URL } from '../configs/constants';
-import DataTable from '../components/DataTable';
+import { BASE_URL } from '../../configs/constants';
+import DataTable from '../../components/DataTable';
 
 const Home = () => {
   const dataTableRef = useRef(null);
@@ -12,11 +12,11 @@ const Home = () => {
   });
 
   return (
-    <div>
-      <h2>Home</h2>
-      <h4>BASE_URL = {BASE_URL}</h4>
-      <p>Bienvenido a la página de inicio.</p>
+    <>
       <Container>
+        <h2>Home</h2>
+        <h4>BASE_URL = {BASE_URL}</h4>
+        <p>Bienvenido a la página de inicio.</p>
         <Row>
           <Col md={5}>
             <DataTable 
@@ -40,7 +40,7 @@ const Home = () => {
           </Col>
         </Row>
       </Container>
-    </div>
+    </>
   );
 };
 

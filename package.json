@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev2": "npx rollup -c rollup.config.js -w & rerun app.rb -ignore 'src' 'public'",
-    "dev": "npx rollup -c rollup.config.js -w & node ./node_modules/nodemon/bin/nodemon.js app.js --ignore './public/' --ignore './src/'",
+    "dev": "npx rollup -c rollup.config.js -w & rake dev:start",
     "build": "rollup -c",
     "front": "npx rollup -c rollup.config.js -w",
     "back": "node ./node_modules/nodemon/bin/nodemon.js app.js --ignore './public/' --ignore './src/'",

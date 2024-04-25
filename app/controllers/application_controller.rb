@@ -1,3 +1,5 @@
+require 'dotenv/load'
+
 class ApplicationController < Sinatra::Base
   configure do
     set :views, 'app/views'
@@ -5,7 +7,8 @@ class ApplicationController < Sinatra::Base
     set :session_secret, 'a33ac20e2af6b865a35b005c6c8df10e'
     set :layout, 'views/layouts'
     set :public_folder, File.dirname(__FILE__) + '/../../public'
-    set :constants, CONSTANTS[:local]
+    set :constants, CONSTANTS[ENV['ENV'].to_sym]
+    @@constants = CONSTANTS[ENV['ENV']]
   end
 
   before do

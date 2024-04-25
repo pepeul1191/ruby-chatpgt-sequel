@@ -1,7 +1,7 @@
 import React from 'react';
-import Home from '../pages/Home';
-import About from '../pages/About';
-import Contact from '../pages/Contact';
+import Home from '../pages/app/Home';
+import About from '../pages/app/About';
+import Contact from '../pages/app/Contact';
 import { Link } from 'react-router-dom';
 
 /*
@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom';
 const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div className="container-fluid">
+      <div className="container">
         <a className="navbar-brand" href="/">
           Navbar
         </a>
@@ -39,6 +39,9 @@ const Navbar = () => {
             </li>
             <li className="nav-item">
               <Link to="/about" className="nav-link">Acerca de</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/conversation" className="nav-link">Conversaciones</Link>
             </li>
             <li className="nav-item">
               <Link to="/contact" className="nav-link">Contacto</Link>
