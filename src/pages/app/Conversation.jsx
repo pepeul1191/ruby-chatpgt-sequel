@@ -58,8 +58,6 @@ class Conversation extends Component {
       resultSet, 
     } = this.state;
 
-    
-
     return (
       <>
         <h2>Nueva Conversación</h2>
@@ -67,24 +65,26 @@ class Conversation extends Component {
           <></>
         ) : (
           <Row>
-            <Table striped hover>
-              <thead>
-                <tr>
-                {columns.map((columnName, index) => (
-                  <th key={index}>{columnName}</th>
-                ))}
-                </tr>
-              </thead>
-              <tbody>
-                {resultSet.map((record, resultSetIndex) => 
+            <Col>
+              <Table striped hover>
+                <thead>
                   <tr>
-                  {columns.map((columnName, columnIndex) => (
-                    <td key={columnIndex}>{record[columnName]}</td>
+                  {columns.map((columnName, index) => (
+                    <th key={index}>{columnName}</th>
                   ))}
                   </tr>
-                )}
-              </tbody>
-            </Table>
+                </thead>
+                <tbody>
+                  {resultSet.map((record, resultSetIndex) => 
+                    <tr>
+                    {columns.map((columnName, columnIndex) => (
+                      <td key={columnIndex}>{record[columnName]}</td>
+                    ))}
+                    </tr>
+                  )}
+                </tbody>
+              </Table>
+            </Col>
           </Row>
         )}
         <Row>

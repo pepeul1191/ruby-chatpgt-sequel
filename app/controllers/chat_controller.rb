@@ -7,6 +7,7 @@ class ChatController < ApplicationController
     # procedure
     question = request_body['question']
     response = ChatHelper::ask_chatgpt(question)
+    CHAT[:conversations].insert_one(JSON.parse(response.to_json))
     # response
     response.to_json
   end
