@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
 import 'font-awesome/css/font-awesome.min.css';
 import './DataTable.css';
 
@@ -21,6 +22,8 @@ class DataTable extends Component {
       rowKeyId: (props.rowKeyId !== null && props.rowKeyId !== undefined) ? props.rowKeyId : 'id',
       observer: { new: [], edit: [], delete: []},
       buttonAddRow: (props.buttonAddRow !== null && props.buttonAddRow !== undefined) ? props.buttonAddRow : false,
+      buttonAddRecord: (props.buttonAddRecord !== null && props.buttonAddRecord !== undefined) ? props.buttonAddRecord : false,
+      linkAddRecord: (props.linkAddRecord !== null && props.linkAddRecord !== undefined) ? props.linkAddRecord : '/',
       buttonSave: (props.buttonSave !== null && props.buttonSave !== undefined) ? props.buttonSave : false,
       rowButtons: (props.rowButtons !== null && props.rowButtons !== undefined) ? props.rowButtons : [],
       extraData: (props.extraData !== null && props.extraData !== undefined) ? props.extraData : {},
@@ -275,7 +278,17 @@ class DataTable extends Component {
   }
 
   render() {
-    const { fetchURL, ths, data, trs, buttonAddRow, buttonSave, rowButtons } = this.state;
+    const { 
+      fetchURL, 
+      ths, 
+      data, 
+      trs, 
+      buttonAddRow, 
+      buttonSave, 
+      rowButtons, 
+      buttonAddRecord,
+      linkAddRecord
+    } = this.state;
     return (
       <>
         <Table striped hover>
@@ -342,6 +355,11 @@ class DataTable extends Component {
                 <td colSpan="5" style={{textAlign:'right'}}>
                   {(buttonAddRow) && (
                     <button onClick={this.addRow} className="btn btn-primary"> <i className="fa fa-plus" style={{marginRight:'5px'}}></i>Agregar Registro</button>
+                  )}
+                  {(buttonAddRecord) && (
+                    <NavLink to={linkAddRecord} className="btn btn-primary" activeClassName="active" exact>
+                      <i className="fa fa-plus" style={{marginRight:'5px'}}></i>Agregar Registro
+                    </NavLink>
                   )}
                   {(buttonSave) && (
                     <button onClick={this.save} className="btn btn-success saveButton"> <i className="fa fa-check" style={{marginRight:'5px'}}></i>Guardar Cambios</button>

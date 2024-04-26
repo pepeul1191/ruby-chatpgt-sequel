@@ -63,9 +63,19 @@ React PP:
 
     https://github.com/pepeul1191/react-rollup
 
+MongoDB:
+
+    $ sudo chown -R mongodb:mongodb /var/lib/mongodb
+    $ sudo chown mongodb:mongodb /tmp/mongodb-27017.sock
+    $ sudo chown -R mongodb:mongodb /var/log/mongodb
+    $ sudo systemctl start mongod
+    $ sudo ss -pnltu | grep 27017
+    $ mongosh
+
 ---
 
 Fuentes:
 
 + https://chat.openai.com/c/605a221a-87d7-4798-8783-37ecd465e384
 + https://github.com/sulmanweb/openai_chatgpt
++ https://www.cherryservers.com/blog/install-mongodb-ubuntu-22-04

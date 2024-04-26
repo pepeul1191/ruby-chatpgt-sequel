@@ -7,6 +7,7 @@ gem 'dotenv'
 # dbs
 gem 'sequel', '~> 5.79.0'
 gem 'sqlite3'
+gem 'mongo'
 # server
 gem 'rake', '>= 10.0.3'
 gem 'sinatra'
