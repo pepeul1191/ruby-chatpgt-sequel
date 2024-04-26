@@ -72,6 +72,84 @@ MongoDB:
     $ sudo ss -pnltu | grep 27017
     $ mongosh
 
+Diagrama de Base de Datos Relacional
+
+```plantuml
+@startuml
+entity "levels" {
+    + id : INTEGER
+    + name : VARCHAR(30)
+}
+
+entity "body_parts" {
+    + id : INTEGER
+    + name : VARCHAR(30)
+}
+
+entity "exercises" {
+    + id : INTEGER
+    + name : VARCHAR(40)
+    + image_url : VARCHAR(50)
+    + video_url : VARCHAR(80)
+    + description : TEXT
+    + body_part_id : INTEGER
+}
+
+entity "members" {
+    + id : INTEGER
+    + code : INTEGER
+    + dni : VARCHAR(8)
+    + names : VARCHAR(30)
+    + last_names : VARCHAR(45)
+    + email : VARCHAR(50)
+    + phone : VARCHAR(30)
+    + image_url : VARCHAR(50)
+    + level_id : INTEGER
+}
+
+entity "users" {
+    + id : INTEGER
+    + user : VARCHAR(30)
+    + password : VARCHAR(30)
+    + member_id : INTEGER
+    + activation_key : VARCHAR(20)
+    + reset_key : VARCHAR(20)
+}
+
+entity "exercises_members" {
+    + id : INTEGER
+    + reps : INTEGER
+    + sets : INTEGER
+    + exercise_id : INTEGER
+    + member_id : INTEGER
+}
+
+entity "months" {
+    + id : INTEGER
+    + name : VARCHAR(15)
+}
+
+entity "years" {
+    + id : INTEGER
+    + name : INTEGER
+}
+
+entity "periods" {
+    + id : INTEGER
+    + year_id : INTEGER
+    + month_id : INTEGER
+}
+levels --|{ members
+body_parts --|{ exercises
+members -- users
+members --{ exercises_members
+exercises --{ exercises_members
+years --{ periods
+months --{ periods
+@enduml
+
+```
+
 ---
 
 Fuentes:
