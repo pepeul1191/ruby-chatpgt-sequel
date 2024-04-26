@@ -28,7 +28,7 @@ class HomeController < ApplicationController
     end
   end
 
-  get '/distritos' do
-    District.all.to_a.to_json
+  get '/level/list' do
+    Level.all.to_a.to_json
   end  
 end
