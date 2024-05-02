@@ -14,7 +14,7 @@ class HomeController < ApplicationController
     '/',
     '/about',
     '/conversation',
-    '/conversation/add',
+    '/conversation/:conversation_id',
     '/contact'
   ].each do |path|
     get path do

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { InputGroup, FormControl, Row, Col, Table, Button } from 'react-bootstrap';
-import { sendQuestion } from '../../services/ChatService';
+import { InputGroup, FormControl, Row, Col, Table, Button, } from 'react-bootstrap';
+import { sendQuestion, fetchConverstaion } from '../../services/ChatService';
 
 class Conversation extends Component {
   constructor(props) {
     document.title = 'Nueva Conversación';
     super(props);
+    this.conversationId = 'XD';
     this.state = {
       question: '',
       message: '',
@@ -14,22 +15,49 @@ class Conversation extends Component {
       columns: [],
       resultSet: [],
       disabled: false,
+      messages: [],
     };
     this.questionInputRef = React.createRef();
+    this.conversationId = window.location.href.split('/').pop();
   }
 
   componentDidMount() {
     // TODO: load previous messages from mongodb
+    fetchConverstaion(this.conversationId)
+      .then(responseData => {
+        console.log(responseData);
+      })
+      .catch(error => {
+        console.error(error);
+        this.setState({ 
+          message: 'Ocurrió un error al traer la conversación',
+          messageClass: 'text-danger' 
+        });
+        setTimeout(() => {
+          this.setState({ 
+            message: '', 
+            messageClass: '' 
+          });
+        }, 5000);
+        setTimeout(() => {
+          this.setState({ 
+            disabled: false, 
+          });
+        }, 1500);
+      });
   }
 
   sendMessageClick = () => {
-    const { question, } = this.state;
+    const { question, messages } = this.state;
     sendQuestion(question)
       .then(responseData => {
         console.log(responseData);
+        const messagesUpdate = [...messages];
+        messagesUpdate.push(responseData);
         this.setState({
           columns: responseData.data.columns,
           resultSet: responseData.data.result_set,
+          messages: messagesUpdate,
         });
       })
       .catch(error => {
@@ -56,6 +84,7 @@ class Conversation extends Component {
     const { 
       columns, 
       resultSet, 
+      messages, 
     } = this.state;
 
     return (

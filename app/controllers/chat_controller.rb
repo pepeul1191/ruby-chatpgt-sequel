@@ -11,4 +11,12 @@ class ChatController < ApplicationController
     # response
     response.to_json
   end
+
+  get '/chat/:conversation_id' do
+    conversation_id = params['conversation_id']
+    conversation_object_id = BSON::ObjectId.from_string(conversation_id)
+    document = collection.find(_id: objectId)
+    # Renderizar un mensaje de saludo con el nombre recibido
+    "Hello, #{conversation_id}!"
+  end
 end

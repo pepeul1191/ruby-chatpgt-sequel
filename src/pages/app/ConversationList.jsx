@@ -2,9 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import { BASE_URL } from '../../configs/constants';
 import DataTable from '../../components/DataTable';
 import { Row, Col } from 'react-bootstrap';
+//import { v4 as uuidv4 } from 'uuid';
 
 const ConversationList = () => {
   const dataTableRef = useRef(null);
+  const newConversationId = 'uuidv4()';
 
   useEffect(() => {
     dataTableRef.current.fetchList();
@@ -30,7 +32,7 @@ const ConversationList = () => {
             fetchURL={`${BASE_URL}body-part/list`}
             saveURL={`${BASE_URL}body-part/save`}
             buttonAddRecord={true}
-            linkAddRecord='/conversation/add'
+            linkAddRecord={`/conversation/${newConversationId}`}
             rowButtons={[{type: 'delete', style: {'marginLeft': '22px'}}, ]}
           />
         </Col>

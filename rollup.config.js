@@ -14,7 +14,8 @@ const App = {
    input: 'src/entries/index.js',
    output: {
       file: production ? 'public/dist/app.min.js' : 'public/dist/app.js',
-      format: 'iife'
+      format: 'iife',
+      sourcemap: true, 
    },
    plugins: [
       nodeResolve({
