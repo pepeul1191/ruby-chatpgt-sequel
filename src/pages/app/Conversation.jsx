@@ -10,14 +10,19 @@ class Conversation extends Component {
     this.state = {
       question: '',
       message: '',
+      name: 'Nueva conversación',
       messageClass: '',
       messageClass: '',
       columns: [],
       resultSet: [],
       disabled: false,
       messages: [],
+      pagination: (props.pagination !== null && props.pagination !== undefined) ? props.pagination : {
+        show: false, numberPages: 0, page: 1, step: 10, 
+      },
     };
     this.questionInputRef = React.createRef();
+    this.nameInputRef = React.createRef();
     this.conversationId = window.location.href.split('/').pop();
   }
 
@@ -48,16 +53,19 @@ class Conversation extends Component {
   }
 
   sendMessageClick = () => {
-    const { question, messages } = this.state;
+    const { question, messages, pagination } = this.state;
     sendQuestion(question)
       .then(responseData => {
         console.log(responseData);
+        console.log(responseData.data.result_set.length)
+        console.log(pagination.step)
         const messagesUpdate = [...messages];
         messagesUpdate.push(responseData);
         this.setState({
           columns: responseData.data.columns,
           resultSet: responseData.data.result_set,
           messages: messagesUpdate,
+          pagination: ( responseData.data.result_set.length > pagination.step ? pagination.show == true : pagination ),
         });
       })
       .catch(error => {
@@ -80,16 +88,39 @@ class Conversation extends Component {
       });
   }
 
+  updateNameClick = () => {
+    const { name } = this.state;
+    console.log(name);
+  }
+
   render() {
     const { 
       columns, 
       resultSet, 
       messages, 
+      pagination,
     } = this.state;
 
     return (
       <>
-        <h2>Nueva Conversación</h2>
+        <Row>
+          <Col>
+            <InputGroup className="mb-3">
+              <InputGroup.Text>Nombre de la Conversación</InputGroup.Text>
+              <FormControl
+                placeholder="Cuál es su pregunta?"
+                aria-label="Cuál es su pregunta?"
+                aria-describedby="button-send"
+                value={this.state.name}
+                onChange={(e) => this.setState({ name: e.target.value })}
+                ref={this.nameInputRef}
+              />
+              <Button variant="success" id="button-send" onClick={this.updateNameClick} style={{ width: '120px' }} >
+                <i className="fa fa-check" aria-hidden="true" style={{marginRight:'5px'}}></i>Guardar
+              </Button>
+            </InputGroup>
+          </Col>
+        </Row>
         {resultSet.length === 0 ? (
           <></>
         ) : (
@@ -112,6 +143,11 @@ class Conversation extends Component {
                     </tr>
                   )}
                 </tbody>
+                {pagination.show ? (
+                  <tfoot>
+                    <label>Futuros botones</label>
+                  </tfoot>
+                ): (<></>)}
               </Table>
             </Col>
           </Row>
@@ -127,7 +163,7 @@ class Conversation extends Component {
                 onChange={(e) => this.setState({ question: e.target.value })}
                 ref={this.questionInputRef}
               />
-              <Button variant="primary" id="button-send" onClick={this.sendMessageClick}>
+              <Button variant="primary" id="button-send" onClick={this.sendMessageClick} style={{ width: '120px' }} >
                 <i className="fa fa-paper-plane-o" aria-hidden="true" style={{marginRight:'5px'}}></i>Enviar
               </Button>
             </InputGroup>

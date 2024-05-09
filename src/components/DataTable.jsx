@@ -27,6 +27,9 @@ class DataTable extends Component {
       buttonSave: (props.buttonSave !== null && props.buttonSave !== undefined) ? props.buttonSave : false,
       rowButtons: (props.rowButtons !== null && props.rowButtons !== undefined) ? props.rowButtons : [],
       extraData: (props.extraData !== null && props.extraData !== undefined) ? props.extraData : {},
+      pagination: (props.pagination !== null && props.pagination !== undefined) ? props.pagination : {
+        show: false, remote: false, numberPages: 0, page: 1, step: 10, 
+      },
     };
     this.userInputRef = React.createRef();
   }
@@ -36,9 +39,19 @@ class DataTable extends Component {
   }
 
   fetchList() {
-    const { fetchURL, data } = this.state;
+    const { fetchURL, data, pagination } = this.state;
+    // check pagiation
+    var paginationParams = '';
+    if(pagination.show){
+      if(pagination.remote){
+        paginationParams = `?step=${pagination.step}&page=${pagination.page}`;
+      }else{
+
+      }
+    }
+    // do request
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', fetchURL, true);
+    xhr.open('GET', fetchURL + paginationParams, true);
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 300) {
         var data = JSON.parse(xhr.responseText);
@@ -287,7 +300,8 @@ class DataTable extends Component {
       buttonSave, 
       rowButtons, 
       buttonAddRecord,
-      linkAddRecord
+      linkAddRecord,
+      pagination,
     } = this.state;
     return (
       <>
@@ -352,6 +366,10 @@ class DataTable extends Component {
           { ( 
             <tfoot>
               <tr>
+                {pagination.show ? (
+                  <label>Futuros botones</label>
+                  ): (<></>)
+                }
                 <td colSpan="5" style={{textAlign:'right'}}>
                   {(buttonAddRow) && (
                     <button onClick={this.addRow} className="btn btn-primary"> <i className="fa fa-plus" style={{marginRight:'5px'}}></i>Agregar Registro</button>
