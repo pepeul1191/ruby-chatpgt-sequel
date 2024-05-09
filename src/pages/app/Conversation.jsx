@@ -14,11 +14,12 @@ class Conversation extends Component {
       messageClass: '',
       messageClass: '',
       columns: [],
+      rows: [],
       resultSet: [],
       disabled: false,
       messages: [],
       pagination: (props.pagination !== null && props.pagination !== undefined) ? props.pagination : {
-        show: false, numberPages: 0, page: 1, step: 10, 
+        show: false, numberPages: 0, page: 1, step: 10, offset: 0
       },
     };
     this.questionInputRef = React.createRef();
@@ -52,20 +53,35 @@ class Conversation extends Component {
       });
   }
 
+  setRows() {
+    const { pagination, resultSet, } = this.state;
+    if(pagination.show){
+      this.setState({
+        rows: resultSet.slice((pagination.page - 1) * pagination.step, pagination.page * pagination.step)
+      })
+    }else{
+      this.setState({
+        rows: resultSet
+      })
+    }
+  }
+
   sendMessageClick = () => {
     const { question, messages, pagination } = this.state;
     sendQuestion(question)
       .then(responseData => {
-        console.log(responseData);
-        console.log(responseData.data.result_set.length)
-        console.log(pagination.step)
         const messagesUpdate = [...messages];
         messagesUpdate.push(responseData);
         this.setState({
           columns: responseData.data.columns,
           resultSet: responseData.data.result_set,
           messages: messagesUpdate,
-          pagination: ( responseData.data.result_set.length > pagination.step ? pagination.show == true : pagination ),
+          pagination: ( responseData.data.result_set.length > pagination.step ? 
+            { ...pagination, show: true, numberPages: Math.ceil(responseData.data.result_set.length / pagination.step) } : 
+            { ...pagination, show: false } 
+          ),
+        }, () => {
+          this.setRows();
         });
       })
       .catch(error => {
@@ -93,12 +109,49 @@ class Conversation extends Component {
     console.log(name);
   }
 
+  goBegin = () => {
+    const { pagination } = this.state;
+    this.setState({
+      pagination: { ...pagination, page: 1 }  
+    }, () => {
+      this.setRows();
+    });
+  }
+
+  goPrevious = () => {
+    const { pagination } = this.state;
+    this.setState({
+      pagination: { ...pagination, page: pagination.page - 1 }  
+    }, () => {
+      this.setRows();
+    });
+  }
+
+  goNext = () => {
+    const { pagination } = this.state;
+    this.setState({
+      pagination: { ...pagination, page: pagination.page + 1 }  
+    }, () => {
+      this.setRows();
+    });
+  }
+
+  goLast = () => {
+    const { pagination } = this.state;
+    this.setState({
+      pagination: { ...pagination, page: pagination.numberPages }  
+    }, () => {
+      this.setRows();
+    });
+  }
+
   render() {
     const { 
       columns, 
       resultSet, 
       messages, 
       pagination,
+      rows,
     } = this.state;
 
     return (
@@ -135,8 +188,8 @@ class Conversation extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {resultSet.map((record, resultSetIndex) => 
-                    <tr>
+                  {rows.map((record, resultSetIndex) => 
+                    <tr key={resultSetIndex}>
                     {columns.map((columnName, columnIndex) => (
                       <td key={columnIndex}>{record[columnName]}</td>
                     ))}
@@ -145,7 +198,23 @@ class Conversation extends Component {
                 </tbody>
                 {pagination.show ? (
                   <tfoot>
-                    <label>Futuros botones</label>
+                    <tr>
+                      <td colSpan="4">
+                        {pagination.page !== 1 && (
+                          <>
+                            <i className="fa fa-angle-double-left footer-icon pagination-btn" onClick={this.goBegin} aria-hidden="true"></i> &nbsp;
+                            <i className="fa fa-angle-left footer-icon pagination-btn" onClick={this.goPrevious} aria-hidden="true"></i> &nbsp; 
+                          </>
+                        )}
+                        <label className="pagination-number">{pagination.page} / {pagination.numberPages}</label>
+                        {pagination.page !== pagination.numberPages && (
+                          <>
+                            &nbsp; <i className="fa fa-angle-right footer-icon pagination-btn" onClick={this.goNext} aria-hidden="true"></i>
+                            &nbsp; <i className="fa fa-angle-double-right footer-icon pagination-btn" onClick={this.goLast} aria-hidden="true"></i>
+                          </>
+                        )}
+                      </td>
+                    </tr>
                   </tfoot>
                 ): (<></>)}
               </Table>
