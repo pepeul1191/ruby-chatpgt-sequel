@@ -13,10 +13,28 @@ class ChatController < ApplicationController
   end
 
   get '/chat/:conversation_id' do
-    conversation_id = params['conversation_id']
-    conversation_object_id = BSON::ObjectId.from_string(conversation_id)
-    document = collection.find(_id: objectId)
-    # Renderizar un mensaje de saludo con el nombre recibido
-    "Hello, #{conversation_id}!"
+    resp = {
+      status: 'error',
+      message: '',
+      data: '',
+    }
+    begin
+      conversation_id = params['conversation_id']
+      _id = BSON::ObjectId(conversation_id)
+      document = CHAT[:conversations].find(_id: _id).first
+      if document.nil?
+        resp[:message] = 'No se encontró conversación'
+        resp[:data] = nil
+      else
+        resp[:message] = 'Conversación encontrada'
+        resp[:data] = document
+      end
+      resp[:status] = 'success'
+    rescue => e
+      puts e.message
+      resp[:message] = 'Ocurrió un error al buscar la conversación',
+      resp[:data] = e.message
+    end
+    resp.to_json
   end
 end

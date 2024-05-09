@@ -157,3 +157,4 @@ Fuentes:
 + https://chat.openai.com/c/605a221a-87d7-4798-8783-37ecd465e384
 + https://github.com/sulmanweb/openai_chatgpt
 + https://www.cherryservers.com/blog/install-mongodb-ubuntu-22-04
++ https://regex101.com/r/rbf4KT/1
