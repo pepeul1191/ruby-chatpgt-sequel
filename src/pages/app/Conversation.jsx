@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { InputGroup, FormControl, Row, Col, Table, Button, } from 'react-bootstrap';
+import { InputGroup, FormControl, Row, Col, Table, Button, Form, } from 'react-bootstrap';
 import { sendQuestion, fetchConverstaion } from '../../services/ChatService';
 
 class Conversation extends Component {
@@ -55,6 +55,7 @@ class Conversation extends Component {
 
   setRows() {
     const { pagination, resultSet, } = this.state;
+    console.log(pagination);
     if(pagination.show){
       this.setState({
         rows: resultSet.slice((pagination.page - 1) * pagination.step, pagination.page * pagination.step)
@@ -145,6 +146,17 @@ class Conversation extends Component {
     });
   }
 
+  handleStepChange = (e) => {
+    const { 
+      pagination,
+    } = this.state;
+    this.setState({
+      pagination: { ...pagination, page: 1, step: e.target.value }  
+    }, () => {
+      this.setRows();
+    });
+  };
+
   render() {
     const { 
       columns, 
@@ -199,7 +211,23 @@ class Conversation extends Component {
                 {pagination.show ? (
                   <tfoot>
                     <tr>
-                      <td colSpan="4">
+                      <td colSpan="20">
+                        <Form>
+                          <Form.Group controlId="exampleForm.SelectCustom">
+                            <Form.Label column sm={3}>Filas por página:</Form.Label>
+                            <Col sm={9}>
+                              <Form.Control as="select" custom="true" onChange={this.handleStepChange} value={pagination.step}>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                                <option value="30">30</option>
+                                <option value="40">35</option>
+                                <option value="40">40</option>
+                              </Form.Control>
+                            </Col>
+                          </Form.Group>
+                        </Form>
                         {pagination.page !== 1 && (
                           <>
                             <i className="fa fa-angle-double-left footer-icon pagination-btn" onClick={this.goBegin} aria-hidden="true"></i> &nbsp;
