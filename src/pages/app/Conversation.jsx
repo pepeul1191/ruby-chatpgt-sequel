@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { InputGroup, FormControl, Row, Col, Table, Button, Form, Modal, } from 'react-bootstrap';
-import { sendQuestion, fetchConverstaion } from '../../services/ChatService';
+import { sendQuestion, fetchConverstaion, sendReport } from '../../services/ChatService';
 import * as XLSX from 'xlsx';
 
 class Conversation extends Component {
@@ -23,9 +23,11 @@ class Conversation extends Component {
       },
       showShareModal: false,
       showReportModal: false,
+      email: '',
     };
     this.questionInputRef = React.createRef();
     this.nameInputRef = React.createRef();
+    this.emailInputRef = React.createRef();
     this.conversationId = window.location.href.split('/').pop();
   }
 
@@ -182,6 +184,43 @@ class Conversation extends Component {
     })
     console.log('shareReport')
   }
+
+  sendReport = (e) => {
+    const { 
+      email,
+      question, 
+      resultSet, 
+    } = this.state;
+    const worksheet = XLSX.utils.json_to_sheet(resultSet);
+    const workbook = XLSX.utils.book_new();
+    const conversationId = window.location.href.split('/').pop();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'reporte');
+    const fileName = `${conversationId} - ${question}.xlsx`;
+    const data = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
+    const file = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    sendReport(file, fileName, email)
+      .then(responseData => {
+        console.log(responseData)
+      })
+      .catch(error => {
+        console.error(error);
+        this.setState({ 
+          message: 'Ocurrió un error al enviar el reporte',
+          messageClass: 'text-danger' 
+        });
+        setTimeout(() => {
+          this.setState({ 
+            message: '', 
+            messageClass: '' 
+          });
+        }, 5000);
+        setTimeout(() => {
+          this.setState({ 
+            disabled: false, 
+          });
+        }, 1500);
+      });
+  }
   
   handleShareClose  = (e) => {
     this.setState({
@@ -208,6 +247,7 @@ class Conversation extends Component {
       rows,
       showShareModal,
       showReportModal,
+      email,
     } = this.state;
     //this.questionInputRef.current.focus();
 
@@ -262,7 +302,7 @@ class Conversation extends Component {
                             <Button variant="secondary" id="button-send" onClick={this.changeReport} style={{ marginRight: '10px' }} >
                               <i className="fa fa-line-chart" aria-hidden="true" style={{marginRight:'5px'}}></i>Cambiar Vista
                             </Button>
-                            <Button variant="secondary" id="button-send" onClick={this.shareReport} style={{ }} >
+                            <Button variant="secondary" id="button-send" onClick={this.shareReport} style={{ marginRight: '10px' }} >
                               <i className="fa fa-share-alt" aria-hidden="true" style={{marginRight:'5px'}}></i>Compartir
                             </Button>
                             <Button variant="secondary" id="button-send" onClick={this.downloadReport} style={{ marginRight: '10px' }} >
@@ -325,19 +365,27 @@ class Conversation extends Component {
         {/* modal share */}
         <Modal show={showShareModal} onHide={this.handleShareClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Compartir Reporte</Modal.Title>
+            <Modal.Title>Compartir Datos del Reporte</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Este es un ejemplo de modal utilizando React Bootstrap.
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Correo(s):</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Si son varios sepárelos con un punto y coma (;)"
+                value={email}
+                onChange={(e) => this.setState({ email: e.target.value })}
+                ref={this.emailInputRef}
+              />
+            </Form.Group>
+            <Row className="justify-content-end" style={{marginTop: '10px'}}>
+              <Col sm={6} style={{textAlign: 'right', }}>
+                <Button variant="primary" onClick={this.sendReport}>
+                  <i className="fa fa-envelope-o" aria-hidden="true" style={{marginRight:'5px'}}></i>Enviar
+                </Button>
+              </Col>
+            </Row>
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleClose}>
-              Cerrar
-            </Button>
-            <Button variant="primary" onClick={this.handleClose}>
-              Guardar Cambios
-            </Button>
-          </Modal.Footer>
         </Modal>
         {/* modal chart */}
         <Modal show={showReportModal} onHide={this.handleReportClose}>

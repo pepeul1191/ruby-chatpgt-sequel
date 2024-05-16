@@ -37,4 +37,21 @@ class ChatController < ApplicationController
     end
     resp.to_json
   end
+
+  post '/chat/send-report' do
+    file = params[:file]
+    emails = params[:emails]
+
+    filename = file[:filename]
+    tempfile = file[:tempfile]
+
+    File.open("./tmp/#{filename}", 'wb') do |f|
+      f.write(tempfile.read)
+    end
+
+    puts filename
+    puts tempfile.path()
+    puts emails
+    'XD'
+  end
 end

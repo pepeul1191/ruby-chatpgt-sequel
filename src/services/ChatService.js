@@ -26,6 +26,7 @@ export const sendQuestion = (question) => {
       throw error; // Re-lanzar el error para manejarlo en el componente
     });
 };
+
 export const fetchConverstaion = (converstionId) => {
   const requestOptions = {
     method: 'GET',
@@ -50,5 +51,33 @@ export const fetchConverstaion = (converstionId) => {
     .catch(error => {
       // Manejar cualquier error de red o de solicitud
       throw error;
+    });
+};
+
+export const sendReport = (file, fileName, emails) => {
+  const formData = new FormData();
+  formData.append('file', file, fileName);
+  formData.append('emails', emails);
+  // request
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer yourAccessTokenHere',
+    },
+    body: formData
+  };
+  // do request
+  return fetch(`${BASE_URL}chat/send-report`, requestOptions)
+    .then(response => {
+      if (!response.ok) {
+        return response.text().then(errorText => {
+          console.error(response.status, errorText);
+          throw new Error('Ha ocurrido un error no controlado');
+        });
+      } 
+      return response.json();
+    })
+    .catch(error => {
+      throw error; // Re-lanzar el error para manejarlo en el componente
     });
 };
