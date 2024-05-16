@@ -149,9 +149,12 @@ class Conversation extends Component {
   handleStepChange = (e) => {
     const { 
       pagination,
+      resultSet,
     } = this.state;
+    const step = e.target.value;
+    const pages = Math.ceil( resultSet.length / step);
     this.setState({
-      pagination: { ...pagination, page: 1, step: e.target.value }  
+      pagination: { ...pagination, page: 1, step: step, numberPages: pages }  
     }, () => {
       this.setRows();
     });
