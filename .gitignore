@@ -15,3 +15,4 @@ public/dist
 *.lock
 public/build
 public/fonts
+tmp

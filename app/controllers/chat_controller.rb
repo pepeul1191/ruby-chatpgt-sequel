@@ -49,6 +49,8 @@ class ChatController < ApplicationController
       f.write(tempfile.read)
     end
 
+    EmailHelper::send_report()
+
     puts filename
     puts tempfile.path()
     puts emails
