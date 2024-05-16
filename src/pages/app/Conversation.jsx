@@ -73,8 +73,9 @@ class Conversation extends Component {
   }
 
   sendMessageClick = () => {
-    const { question, messages, pagination, conversationId } = this.state;
-    sendQuestion(question, conversationId)
+    const { question, messages, pagination, conversationId, name } = this.state;
+    const conversationName = name == 'Nueva conversación' ? question : name;
+    sendQuestion(question, conversationId, conversationName)
       .then(responseData => {
         const messagesUpdate = [...messages];
         messagesUpdate.push(responseData);

@@ -1,6 +1,6 @@
 import { CSRF, BASE_URL } from '../configs/constants.js';
 
-export const sendQuestion = (question, conversationId) => {
+export const sendQuestion = (question, conversationId, conversationName) => {
   const requestOptions = {
     method: 'POST',
     headers: {
@@ -10,6 +10,7 @@ export const sendQuestion = (question, conversationId) => {
     body: JSON.stringify({
       question: question,
       conversation_id: conversationId,
+      conversation_name: conversationName,
     })
   };
   // do request

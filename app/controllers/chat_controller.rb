@@ -6,9 +6,9 @@ class ChatController < ApplicationController
     request_body = JSON.parse(request.body.read)
     # procedure
     question = request_body['question']
+    conversation_name = request_body['conversation_name']
     conversation_id = request_body['conversation_id']
     chatpgt_response = ChatHelper::ask_chatgpt(question)
-    puts chatpgt_response[:data][:columns].class
     # new answer
     answer = Answer.new(
       query: chatpgt_response[:query],
@@ -22,10 +22,24 @@ class ChatController < ApplicationController
       created_at: Time.now,
     )
     message.answer = answer
-    message.save
-    puts message.errors.full_messages if message.errors.any?
-    # create or update convesation wieth message
-    
+      # puts message.errors.full_messages if message.errors.any?
+    # create or update convesation with message
+    _id = BSON::ObjectId(conversation_id)
+    convesation = CHAT[:conversations].find(_id: _id).first
+    if convesation.nil? # create
+      conversation = Conversation.new(
+        name: conversation_name,
+        created_at: Time.now,
+        updated_at: Time.now
+      )
+      conversation.messages << message
+      conversation.save
+    else # update
+      conversation.updated_at = Time.now
+      conversation.name = conversation_name
+      conversation.messages << message
+      conversation.save
+    end
     # CHAT[:conversations].insert_one(JSON.parse(response.to_json))
     # response
     chatpgt_response.to_json
