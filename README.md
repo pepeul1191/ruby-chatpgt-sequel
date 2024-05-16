@@ -27,6 +27,8 @@ Archivo <b>.env</b>
     SQALCHEMY_CONNECTION_STRING=sqlite:///db/app.db
     ENV=local||replit
     OPENAI_API_KEY=xyz
+    EMAIL_SENDER=correo@correo.com
+    EMAIL_PASSWORD=123
 
 Migraciones con DBMATE - app:
 

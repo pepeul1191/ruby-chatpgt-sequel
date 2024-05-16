@@ -48,8 +48,8 @@ class ChatController < ApplicationController
     File.open("./tmp/#{filename}", 'wb') do |f|
       f.write(tempfile.read)
     end
-
-    EmailHelper::send_report()
+    attachment_path = "./tmp/#{filename}"
+    EmailHelper::send_report(emails, attachment_path)
 
     puts filename
     puts tempfile.path()
