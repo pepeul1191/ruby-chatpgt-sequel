@@ -4,3 +4,8 @@ development:
       database: ulima_journey
       hosts:
         - localhost:27017
+  sessions:
+    options:
+      #raise_not_found_error has to be not here but see below
+  options: #strictly 2 spaces before
+    raise_not_found_error: false #strictly 4 spaces before not 6

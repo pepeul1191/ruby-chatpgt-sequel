@@ -25,9 +25,10 @@ class ChatController < ApplicationController
       # puts message.errors.full_messages if message.errors.any?
     # create or update convesation with message
     _id = BSON::ObjectId(conversation_id)
-    convesation = CHAT[:conversations].find(_id: _id).first
-    if convesation.nil? # create
+    conversation = Conversation.find_by(id: _id)
+    if conversation.nil? # create
       conversation = Conversation.new(
+        _id: _id,
         name: conversation_name,
         created_at: Time.now,
         updated_at: Time.now
@@ -37,7 +38,7 @@ class ChatController < ApplicationController
     else # update
       conversation.updated_at = Time.now
       conversation.name = conversation_name
-      conversation.messages << message
+      conversation.messages = conversation.messages.to_a << message
       conversation.save
     end
     # CHAT[:conversations].insert_one(JSON.parse(response.to_json))
