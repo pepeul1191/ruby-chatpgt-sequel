@@ -45,6 +45,10 @@ class ChatController < ApplicationController
     chatpgt_response.to_json
   end
 
+  get '/chat/list' do
+    Conversation.all.map(&:attributes).to_json
+  end
+
   get '/chat/:conversation_id' do
     resp = {
       status: 'error',

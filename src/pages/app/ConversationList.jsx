@@ -42,8 +42,8 @@ class ConversationList extends Component {
                 {style: {}, caption: 'Nombre'}, 
                 {style: {}, caption: 'Acciones'}, 
               ]}
-              fetchURL={`${BASE_URL}body-part/list`}
-              saveURL={`${BASE_URL}body-part/save`}
+              fetchURL={`${BASE_URL}chat/list`}
+              saveURL={`${BASE_URL}chat/save`}
               buttonAddRecord={true}
               linkAddRecord={`/conversation/${this.newConversationId}`}
               rowButtons={[{type: 'delete', style: {'marginLeft': '22px'}}, ]}
