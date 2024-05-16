@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { InputGroup, FormControl, Row, Col, Table, Button, Form, } from 'react-bootstrap';
 import { sendQuestion, fetchConverstaion } from '../../services/ChatService';
+import * as XLSX from 'xlsx';
 
 class Conversation extends Component {
   constructor(props) {
     document.title = 'Nueva Conversación';
     super(props);
-    this.conversationId = 'XD';
     this.state = {
       question: '',
       message: '',
@@ -160,6 +160,23 @@ class Conversation extends Component {
     });
   };
 
+  changeReport = (e) => {
+    console.log('changeReport')
+  }
+
+  downloadReport = (e) => {
+    const { question, resultSet } = this.state;
+    const worksheet = XLSX.utils.json_to_sheet(resultSet);
+    const workbook = XLSX.utils.book_new();
+    const conversationId = window.location.href.split('/').pop();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'reporte');
+    XLSX.writeFile(workbook, `${conversationId} - ${question}.xlsx`);
+  }  
+
+  shareReport = (e) => {
+    console.log('shareReport')
+  }  
+
   render() {
     const { 
       columns, 
@@ -218,7 +235,15 @@ class Conversation extends Component {
                       <td colSpan="20">
                         <Row>
                           <Col sm={7}>
-                            
+                            <Button variant="secondary" id="button-send" onClick={this.changeReport} style={{ marginRight: '10px' }} >
+                              <i className="fa fa-line-chart" aria-hidden="true" style={{marginRight:'5px'}}></i>Cambiar Vista
+                            </Button>
+                            <Button variant="secondary" id="button-send" onClick={this.downloadReport} style={{ marginRight: '10px' }} >
+                              <i className="fa fa-download" aria-hidden="true" style={{marginRight:'5px'}}></i>Descargar
+                            </Button>
+                            <Button variant="secondary" id="button-send" onClick={this.shareReport} style={{ }} >
+                              <i className="fa fa-share-alt" aria-hidden="true" style={{marginRight:'5px'}}></i>Compartir
+                            </Button>
                           </Col>
                           <Col sm={5} style={{textAlign: 'right', }}>
                             <Form.Group as={Form.Row} className="align-items-center" style={{display: 'inline-block', marginRight: '10px'}}>
