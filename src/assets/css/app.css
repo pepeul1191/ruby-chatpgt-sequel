@@ -10,7 +10,8 @@ input[type="text"].form-control,
 input.form-control, 
 input[type="password"].form-control, 
 input[type="email"].form-control,
-.input-group-text { 
+.input-group-text,
+.modal-content { 
   border-radius: 0px;
 }
 

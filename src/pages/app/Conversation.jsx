@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { InputGroup, FormControl, Row, Col, Table, Button, Form, } from 'react-bootstrap';
+import { InputGroup, FormControl, Row, Col, Table, Button, Form, Modal, } from 'react-bootstrap';
 import { sendQuestion, fetchConverstaion } from '../../services/ChatService';
 import * as XLSX from 'xlsx';
 
@@ -21,6 +21,8 @@ class Conversation extends Component {
       pagination: (props.pagination !== null && props.pagination !== undefined) ? props.pagination : {
         show: false, numberPages: 0, page: 1, step: 10, offset: 0
       },
+      showShareModal: false,
+      showReportModal: false,
     };
     this.questionInputRef = React.createRef();
     this.nameInputRef = React.createRef();
@@ -161,7 +163,31 @@ class Conversation extends Component {
   };
 
   changeReport = (e) => {
+    this.setState({
+      showReportModal: true
+    })
     console.log('changeReport')
+  }
+
+  handleReportClose  = (e) => {
+    this.setState({
+      showReportModal: false
+    })
+    console.log('handleReportClose')
+  }
+
+  shareReport = (e) => {
+    this.setState({
+      showShareModal: true
+    })
+    console.log('shareReport')
+  }
+  
+  handleShareClose  = (e) => {
+    this.setState({
+      showShareModal: false
+    })
+    console.log('handleShareClose')
   }
 
   downloadReport = (e) => {
@@ -171,11 +197,7 @@ class Conversation extends Component {
     const conversationId = window.location.href.split('/').pop();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'reporte');
     XLSX.writeFile(workbook, `${conversationId} - ${question}.xlsx`);
-  }  
-
-  shareReport = (e) => {
-    console.log('shareReport')
-  }  
+  }    
 
   render() {
     const { 
@@ -184,6 +206,8 @@ class Conversation extends Component {
       messages, 
       pagination,
       rows,
+      showShareModal,
+      showReportModal,
     } = this.state;
     //this.questionInputRef.current.focus();
 
@@ -238,11 +262,11 @@ class Conversation extends Component {
                             <Button variant="secondary" id="button-send" onClick={this.changeReport} style={{ marginRight: '10px' }} >
                               <i className="fa fa-line-chart" aria-hidden="true" style={{marginRight:'5px'}}></i>Cambiar Vista
                             </Button>
-                            <Button variant="secondary" id="button-send" onClick={this.downloadReport} style={{ marginRight: '10px' }} >
-                              <i className="fa fa-download" aria-hidden="true" style={{marginRight:'5px'}}></i>Descargar
-                            </Button>
                             <Button variant="secondary" id="button-send" onClick={this.shareReport} style={{ }} >
                               <i className="fa fa-share-alt" aria-hidden="true" style={{marginRight:'5px'}}></i>Compartir
+                            </Button>
+                            <Button variant="secondary" id="button-send" onClick={this.downloadReport} style={{ marginRight: '10px' }} >
+                              <i className="fa fa-download" aria-hidden="true" style={{marginRight:'5px'}}></i>Descargar
                             </Button>
                           </Col>
                           <Col sm={5} style={{textAlign: 'right', }}>
@@ -298,6 +322,40 @@ class Conversation extends Component {
             </InputGroup>
           </Col>
         </Row>
+        {/* modal share */}
+        <Modal show={showShareModal} onHide={this.handleShareClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Compartir Reporte</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Este es un ejemplo de modal utilizando React Bootstrap.
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose}>
+              Cerrar
+            </Button>
+            <Button variant="primary" onClick={this.handleClose}>
+              Guardar Cambios
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        {/* modal chart */}
+        <Modal show={showReportModal} onHide={this.handleReportClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Cambiar Tipo de Reporte</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Este es un ejemplo de modal utilizando React Bootstrap.
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose}>
+              Cerrar
+            </Button>
+            <Button variant="primary" onClick={this.handleClose}>
+              Guardar Cambios
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </>
     );
   }

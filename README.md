@@ -150,6 +150,11 @@ months --{ periods
 
 ```
 
+Preguntas de ejemplo:
+
++ lista de miembros
++ cantidad de ejercicios asignados a cuantos miembros agrupados por ejercicio
+
 ---
 
 Fuentes:
