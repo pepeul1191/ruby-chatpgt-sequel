@@ -165,6 +165,7 @@ class Conversation extends Component {
       pagination,
       rows,
     } = this.state;
+    //this.questionInputRef.current.focus();
 
     return (
       <>
@@ -212,11 +213,14 @@ class Conversation extends Component {
                   <tfoot>
                     <tr>
                       <td colSpan="20">
-                        <Form>
-                          <Form.Group controlId="exampleForm.SelectCustom">
-                            <Form.Label column sm={3}>Filas por página:</Form.Label>
-                            <Col sm={9}>
-                              <Form.Control as="select" custom="true" onChange={this.handleStepChange} value={pagination.step}>
+                        <Row>
+                          <Col sm={7}>
+                            
+                          </Col>
+                          <Col sm={5} style={{textAlign: 'right', }}>
+                            <Form.Group as={Form.Row} className="align-items-center" style={{display: 'inline-block', marginRight: '10px'}}>
+                              <Form.Label column style={{position: 'relative', float: 'left', marginRight: '10px'}}>Filas por página:</Form.Label>
+                              <Form.Control as="select" onChange={this.handleStepChange} value={pagination.step} style={{width: '65px', }}>
                                 <option value="10">10</option>
                                 <option value="15">15</option>
                                 <option value="20">20</option>
@@ -225,22 +229,22 @@ class Conversation extends Component {
                                 <option value="40">35</option>
                                 <option value="40">40</option>
                               </Form.Control>
-                            </Col>
-                          </Form.Group>
-                        </Form>
-                        {pagination.page !== 1 && (
-                          <>
-                            <i className="fa fa-angle-double-left footer-icon pagination-btn" onClick={this.goBegin} aria-hidden="true"></i> &nbsp;
-                            <i className="fa fa-angle-left footer-icon pagination-btn" onClick={this.goPrevious} aria-hidden="true"></i> &nbsp; 
-                          </>
-                        )}
-                        <label className="pagination-number">{pagination.page} / {pagination.numberPages}</label>
-                        {pagination.page !== pagination.numberPages && (
-                          <>
-                            &nbsp; <i className="fa fa-angle-right footer-icon pagination-btn" onClick={this.goNext} aria-hidden="true"></i>
-                            &nbsp; <i className="fa fa-angle-double-right footer-icon pagination-btn" onClick={this.goLast} aria-hidden="true"></i>
-                          </>
-                        )}
+                            </Form.Group>
+                            {pagination.page !== 1 && (
+                              <>
+                                <i className="fa fa-angle-double-left footer-icon pagination-btn" onClick={this.goBegin} aria-hidden="true"></i> &nbsp;
+                                <i className="fa fa-angle-left footer-icon pagination-btn" onClick={this.goPrevious} aria-hidden="true"></i> &nbsp; 
+                              </>
+                            )}
+                            <label className="pagination-number">{pagination.page} / {pagination.numberPages}</label>
+                            {pagination.page !== pagination.numberPages && (
+                              <>
+                                &nbsp; <i className="fa fa-angle-right footer-icon pagination-btn" onClick={this.goNext} aria-hidden="true"></i>
+                                &nbsp; <i className="fa fa-angle-double-right footer-icon pagination-btn" onClick={this.goLast} aria-hidden="true"></i>
+                              </>
+                            )}
+                          </Col>
+                        </Row>
                       </td>
                     </tr>
                   </tfoot>
