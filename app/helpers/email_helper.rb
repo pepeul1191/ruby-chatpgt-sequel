@@ -47,8 +47,6 @@ module Helpers
         smtp.send_message(message, sender, recipient)
       end
 
-      puts '+++++++++++++++++++++++++++++++++++++++++++++++'
-
       resp = {
         status: 'error',
         message: '',
@@ -56,7 +54,7 @@ module Helpers
         query: '',
       }
       begin
-        puts '+++++++++++++++++++++++++++++++++++++++++++++'
+        puts 'TODO'
       rescue => e
         puts e.message
         resp[:status] = 'error'

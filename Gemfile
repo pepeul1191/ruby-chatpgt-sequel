@@ -8,6 +8,7 @@ gem 'dotenv'
 gem 'sequel', '~> 5.79.0'
 gem 'sqlite3'
 gem 'mongo'
+gem 'mongoid', '~> 7.0'
 # server
 gem 'rake', '>= 10.0.3'
 gem 'sinatra'

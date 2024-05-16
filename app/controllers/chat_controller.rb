@@ -6,10 +6,29 @@ class ChatController < ApplicationController
     request_body = JSON.parse(request.body.read)
     # procedure
     question = request_body['question']
-    response = ChatHelper::ask_chatgpt(question)
-    CHAT[:conversations].insert_one(JSON.parse(response.to_json))
+    conversation_id = request_body['conversation_id']
+    chatpgt_response = ChatHelper::ask_chatgpt(question)
+    puts chatpgt_response[:data][:columns].class
+    # new answer
+    answer = Answer.new(
+      query: chatpgt_response[:query],
+      columns: chatpgt_response[:data][:columns].map(&:to_s),
+      result_set: chatpgt_response[:data][:result_set],
+    )
+    # append answer to new message
+    message = Message.new(
+      question: question,
+      error: false,
+      created_at: Time.now,
+    )
+    message.answer = answer
+    message.save
+    puts message.errors.full_messages if message.errors.any?
+    # create or update convesation wieth message
+    
+    # CHAT[:conversations].insert_one(JSON.parse(response.to_json))
     # response
-    response.to_json
+    chatpgt_response.to_json
   end
 
   get '/chat/:conversation_id' do

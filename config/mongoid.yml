@@ -1,0 +1,6 @@
+development:
+  clients:
+    default:
+      database: ulima_journey
+      hosts:
+        - localhost:27017

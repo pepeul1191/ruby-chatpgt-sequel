@@ -24,16 +24,17 @@ class Conversation extends Component {
       showShareModal: false,
       showReportModal: false,
       email: '',
+      conversationId: window.location.href.split('/').pop(),
     };
     this.questionInputRef = React.createRef();
     this.nameInputRef = React.createRef();
     this.emailInputRef = React.createRef();
-    this.conversationId = window.location.href.split('/').pop();
   }
 
   componentDidMount() {
     // TODO: load previous messages from mongodb
-    fetchConverstaion(this.conversationId)
+    const { conversationId } = this.state;
+    fetchConverstaion(conversationId)
       .then(responseData => {
         console.log(responseData);
       })
@@ -72,8 +73,8 @@ class Conversation extends Component {
   }
 
   sendMessageClick = () => {
-    const { question, messages, pagination } = this.state;
-    sendQuestion(question)
+    const { question, messages, pagination, conversationId } = this.state;
+    sendQuestion(question, conversationId)
       .then(responseData => {
         const messagesUpdate = [...messages];
         messagesUpdate.push(responseData);
@@ -190,10 +191,10 @@ class Conversation extends Component {
       email,
       question, 
       resultSet, 
+      conversationId, 
     } = this.state;
     const worksheet = XLSX.utils.json_to_sheet(resultSet);
     const workbook = XLSX.utils.book_new();
-    const conversationId = window.location.href.split('/').pop();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'reporte');
     const fileName = `${conversationId} - ${question}.xlsx`;
     const data = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
@@ -230,10 +231,9 @@ class Conversation extends Component {
   }
 
   downloadReport = (e) => {
-    const { question, resultSet } = this.state;
+    const { question, resultSet, conversationId } = this.state;
     const worksheet = XLSX.utils.json_to_sheet(resultSet);
     const workbook = XLSX.utils.book_new();
-    const conversationId = window.location.href.split('/').pop();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'reporte');
     XLSX.writeFile(workbook, `${conversationId} - ${question}.xlsx`);
   }    

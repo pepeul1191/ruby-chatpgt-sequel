@@ -29,7 +29,7 @@ module Helpers
             # puts sql[0] # Imprime el SQL encontrado
             query = sql[0]
             rs = DB[query]
-            puts "Query: \n\t#{query}"
+            # puts "Query: \n\t#{query}"
             # check if query return data
             resp[:status] = 'success'
             resp[:data] = {
@@ -37,14 +37,14 @@ module Helpers
               result_set: []
             }
             resp[:query] = query
-            puts "Resultado: \n"
+            # puts "Resultado: \n"
             rs.each do |row|
-              puts "\t#{row}"
+              # puts "\t#{row}"
               resp[:data][:result_set].push(row)
             end
             resp[:message] = 'Consulta exitosa'
           else
-            puts 'No se encontró ninguna consulta SQL en la cadena'
+            # puts 'No se encontró ninguna consulta SQL en la cadena'
             resp[:message] = 'No se encontró ninguna consulta SQL en la cadena'
           end
         end
