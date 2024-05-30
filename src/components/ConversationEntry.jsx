@@ -7,7 +7,7 @@ class ConversationEntry extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      question: '',
+      question: props.question,
       message: '',
       messageClass: '',
       columns: props.columns,
@@ -18,6 +18,7 @@ class ConversationEntry extends Component {
       pagination: (props.pagination !== null && props.pagination !== undefined) ? props.pagination : {
         show: false, numberPages: 0, page: 1, step: 10, offset: 0
       },
+      time: props.time,
       showShareModal: false,
       showReportModal: false,
       email: '',
@@ -164,8 +165,25 @@ class ConversationEntry extends Component {
     const worksheet = XLSX.utils.json_to_sheet(resultSet);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'reporte');
-    XLSX.writeFile(workbook, `${conversationId} - ${question}.xlsx`);
+    XLSX.writeFile(workbook, `${conversationId} - ${new Date().getTime()}.xlsx`);
   }    
+
+  _pad = (n) => {
+    return n < 10 ? '0' + n : n;
+  }
+
+  _toPeruDate = (time) => {
+    let dateTime = new Date(time);
+    dateTime.setHours(dateTime.getHours() - 5);
+    let year = dateTime.getFullYear();
+    let month = dateTime.getMonth() + 1; 
+    let day = dateTime.getDate();
+    let hours = dateTime.getHours();
+    let minutes = dateTime.getMinutes();
+    let seconds = dateTime.getSeconds();
+    let dateTimePeru = year + '-' + this._pad(month) + '-' + this._pad(day) + ' ' + this._pad(hours) + ':' + this._pad(minutes) + ':' + this._pad(seconds);
+    return dateTimePeru;
+  }
 
   render() {
     const { 
@@ -177,7 +195,8 @@ class ConversationEntry extends Component {
       showShareModal,
       showReportModal,
       email,
-      question
+      question,
+      time, 
     } = this.state;
     //this.questionInputRef.current.focus();
     return (
@@ -190,7 +209,8 @@ class ConversationEntry extends Component {
           <Row>
             <Col>
               <Alert variant="info" className="my-custom-class">
-                <b>{question}</b> - 8:00pm
+                La pregunta <b>{question}</b>; trajo <b>{resultSet.length}</b> registros<br />
+                <sub>{this._toPeruDate(time)}</sub>
               </Alert>
             </Col>
           </Row>
@@ -213,54 +233,56 @@ class ConversationEntry extends Component {
                     </tr>
                   )}
                 </tbody>
-                {pagination.show ? (
-                  <tfoot>
-                    <tr>
-                      <td colSpan="20">
-                        <Row>
-                          <Col sm={7}>
-                            <Button variant="secondary" id="button-send" onClick={this.changeReport} style={{ marginRight: '10px' }} >
-                              <i className="fa fa-line-chart" aria-hidden="true" style={{marginRight:'5px'}}></i>Cambiar Vista
-                            </Button>
-                            <Button variant="secondary" id="button-send" onClick={this.shareReport} style={{ marginRight: '10px' }} >
-                              <i className="fa fa-share-alt" aria-hidden="true" style={{marginRight:'5px'}}></i>Compartir
-                            </Button>
-                            <Button variant="secondary" id="button-send" onClick={this.downloadReport} style={{ marginRight: '10px' }} >
-                              <i className="fa fa-download" aria-hidden="true" style={{marginRight:'5px'}}></i>Descargar
-                            </Button>
+                <tfoot>
+                  <tr>
+                    <td colSpan="20">
+                      <Row>
+                        <Col sm={7}>
+                          <Button variant="secondary" id="button-send" onClick={this.changeReport} style={{ marginRight: '10px' }} >
+                            <i className="fa fa-line-chart" aria-hidden="true" style={{marginRight:'5px'}}></i>Cambiar Vista
+                          </Button>
+                          <Button variant="secondary" id="button-send" onClick={this.shareReport} style={{ marginRight: '10px' }} >
+                            <i className="fa fa-share-alt" aria-hidden="true" style={{marginRight:'5px'}}></i>Compartir
+                          </Button>
+                          <Button variant="secondary" id="button-send" onClick={this.downloadReport} style={{ marginRight: '10px' }} >
+                            <i className="fa fa-download" aria-hidden="true" style={{marginRight:'5px'}}></i>Descargar
+                          </Button>
+                        </Col>
+                        {pagination.show ? (
+                          <>
+                            <Col sm={5} style={{textAlign: 'right', }}>
+                              <Form.Group as={Form.Row} className="align-items-center" style={{display: 'inline-block', marginRight: '10px'}}>
+                                <Form.Label column style={{position: 'relative', float: 'left', marginRight: '10px'}}>Filas por página:</Form.Label>
+                                <Form.Control as="select" onChange={this.handleStepChange} value={pagination.step} style={{width: '65px', }}>
+                                  <option value="10">10</option>
+                                  <option value="15">15</option>
+                                  <option value="20">20</option>
+                                  <option value="25">25</option>
+                                  <option value="30">30</option>
+                                  <option value="40">35</option>
+                                  <option value="40">40</option>
+                                </Form.Control>
+                              </Form.Group>
+                              {pagination.page !== 1 && (
+                                <>
+                                  <i className="fa fa-angle-double-left footer-icon pagination-btn" onClick={this.goBegin} aria-hidden="true"></i> &nbsp;
+                                  <i className="fa fa-angle-left footer-icon pagination-btn" onClick={this.goPrevious} aria-hidden="true"></i> &nbsp; 
+                                </>
+                              )}
+                              <label className="pagination-number">{pagination.page} / {pagination.numberPages}</label>
+                              {pagination.page !== pagination.numberPages && (
+                                <>
+                                  &nbsp; <i className="fa fa-angle-right footer-icon pagination-btn" onClick={this.goNext} aria-hidden="true"></i>
+                                  &nbsp; <i className="fa fa-angle-double-right footer-icon pagination-btn" onClick={this.goLast} aria-hidden="true"></i>
+                                </>
+                              )}
                           </Col>
-                          <Col sm={5} style={{textAlign: 'right', }}>
-                            <Form.Group as={Form.Row} className="align-items-center" style={{display: 'inline-block', marginRight: '10px'}}>
-                              <Form.Label column style={{position: 'relative', float: 'left', marginRight: '10px'}}>Filas por página:</Form.Label>
-                              <Form.Control as="select" onChange={this.handleStepChange} value={pagination.step} style={{width: '65px', }}>
-                                <option value="10">10</option>
-                                <option value="15">15</option>
-                                <option value="20">20</option>
-                                <option value="25">25</option>
-                                <option value="30">30</option>
-                                <option value="40">35</option>
-                                <option value="40">40</option>
-                              </Form.Control>
-                            </Form.Group>
-                            {pagination.page !== 1 && (
-                              <>
-                                <i className="fa fa-angle-double-left footer-icon pagination-btn" onClick={this.goBegin} aria-hidden="true"></i> &nbsp;
-                                <i className="fa fa-angle-left footer-icon pagination-btn" onClick={this.goPrevious} aria-hidden="true"></i> &nbsp; 
-                              </>
-                            )}
-                            <label className="pagination-number">{pagination.page} / {pagination.numberPages}</label>
-                            {pagination.page !== pagination.numberPages && (
-                              <>
-                                &nbsp; <i className="fa fa-angle-right footer-icon pagination-btn" onClick={this.goNext} aria-hidden="true"></i>
-                                &nbsp; <i className="fa fa-angle-double-right footer-icon pagination-btn" onClick={this.goLast} aria-hidden="true"></i>
-                              </>
-                            )}
-                          </Col>
-                        </Row>
-                      </td>
-                    </tr>
-                  </tfoot>
-                ): (<></>)}
+                        </>
+                        ): (<></>)}
+                      </Row>
+                    </td>
+                  </tr>
+                </tfoot>
               </Table>
             </Col>
           </Row>

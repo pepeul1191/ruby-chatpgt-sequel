@@ -16,10 +16,12 @@ class ChatController < ApplicationController
       result_set: chatpgt_response[:data][:result_set],
     )
     # append answer to new message
+    message_time = Time.now
+    chatpgt_response[:time] = message_time
     message = Message.new(
       question: question,
       error: false,
-      created_at: Time.now,
+      created_at: message_time,
     )
     message.answer = answer
       # puts message.errors.full_messages if message.errors.any?

@@ -52,7 +52,14 @@ class Conversation extends Component {
       .then(responseData => {
         const newConversationEntryRef = createRef();
         this.setState((prevState) => ({
-          conversationEntries: [...prevState.conversationEntries, { ref: newConversationEntryRef, data: responseData.data }],
+          conversationEntries: [
+            ...prevState.conversationEntries, 
+            { 
+              ref: newConversationEntryRef, 
+              data: responseData.data, 
+              question: question,
+              time: responseData.time, 
+            }],
         }), () => {
           setTimeout(() => {
             newConversationEntryRef.current.setRows();
@@ -113,8 +120,10 @@ class Conversation extends Component {
           <ConversationEntry 
             ref={entry.ref} 
             key={index} 
+            question={entry.question}
             columns={entry.data.columns}
             resultSet={entry.data.result_set}
+            time={entry.time}
             pagination={(entry.data.result_set.length > 10 ? 
               { show: true, numberPages: Math.ceil(entry.data.result_set.length / 10), page: 1, step: 10, offset: 0 } : 
               { show: false } 
