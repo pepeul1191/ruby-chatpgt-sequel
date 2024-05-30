@@ -29,24 +29,31 @@ class ConversationList extends Component {
       <>
         <h2>Conversaciones Pasadas</h2>
         <Row>
-          <Col md={5}>
+          <Col md={9}>
             <DataTable 
               ref={this.dataTableRef}
               path="/template" 
               trs={[
-                {style: {display: 'none'}, type: 'id', key: 'id', },
+                {style: {display: 'none'}, type: 'id', key: '_id', },
                 {style: {}, type: 'input[text]', key: 'name', }, 
+                {style: {}, type: 'input[text]', key: 'created_at', }, 
+                {style: {}, type: 'input[text]', key: 'updated_at', }, 
               ]}
               ths={[
                 {style: {display: 'none'}, caption: 'id'},
                 {style: {}, caption: 'Nombre'}, 
+                {style: {}, caption: 'Fecha de Creación'}, 
+                {style: {}, caption: 'Fecha de Modificación'}, 
                 {style: {}, caption: 'Acciones'}, 
               ]}
               fetchURL={`${BASE_URL}chat/list`}
               saveURL={`${BASE_URL}chat/save`}
               buttonAddRecord={true}
               linkAddRecord={`/conversation/${this.newConversationId}`}
-              rowButtons={[{type: 'delete', style: {'marginLeft': '22px'}}, ]}
+              rowButtons={[
+                {type: 'link', style: {'marginLeft': '7px'},url: '/conversation/', record_id: '_id'}, 
+                {type: 'delete', style: {'marginLeft': '7px', 'marginTop': '5px'}}, 
+              ]}
             />
           </Col>
         </Row>

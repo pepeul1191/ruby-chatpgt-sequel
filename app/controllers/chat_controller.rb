@@ -49,7 +49,7 @@ class ChatController < ApplicationController
   end
 
   get '/chat/list' do
-    Conversation.all.map(&:attributes).to_json
+    Conversation.fetch_resume.to_json
   end
 
   get '/chat/:conversation_id' do
@@ -61,13 +61,13 @@ class ChatController < ApplicationController
     begin
       conversation_id = params['conversation_id']
       _id = BSON::ObjectId(conversation_id)
-      document = CHAT[:conversations].find(_id: _id).first
-      if document.nil?
+      conversation = Conversation.find(_id)
+      if conversation.nil?
         resp[:message] = 'No se encontró conversación'
         resp[:data] = nil
       else
         resp[:message] = 'Conversación encontrada'
-        resp[:data] = document
+        resp[:data] = conversation
       end
       resp[:status] = 'success'
     rescue => e

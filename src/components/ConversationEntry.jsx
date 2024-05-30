@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Table, Button, Form, Modal, Alert, } from 'react-bootstrap';
 import { sendReport } from '../services/ChatService';
+import { toPeruDate as HelperToPeruDate } from '../configs/helpers'; 
 import * as XLSX from 'xlsx';
 
 class ConversationEntry extends Component {
@@ -168,23 +169,6 @@ class ConversationEntry extends Component {
     XLSX.writeFile(workbook, `${conversationId} - ${new Date().getTime()}.xlsx`);
   }    
 
-  _pad = (n) => {
-    return n < 10 ? '0' + n : n;
-  }
-
-  _toPeruDate = (time) => {
-    let dateTime = new Date(time);
-    dateTime.setHours(dateTime.getHours() - 5);
-    let year = dateTime.getFullYear();
-    let month = dateTime.getMonth() + 1; 
-    let day = dateTime.getDate();
-    let hours = dateTime.getHours();
-    let minutes = dateTime.getMinutes();
-    let seconds = dateTime.getSeconds();
-    let dateTimePeru = year + '-' + this._pad(month) + '-' + this._pad(day) + ' ' + this._pad(hours) + ':' + this._pad(minutes) + ':' + this._pad(seconds);
-    return dateTimePeru;
-  }
-
   render() {
     const { 
       columns, 
@@ -210,7 +194,7 @@ class ConversationEntry extends Component {
             <Col>
               <Alert variant="info" className="my-custom-class">
                 La pregunta <b>{question}</b>; trajo <b>{resultSet.length}</b> registros<br />
-                <sub>{this._toPeruDate(time)}</sub>
+                <sub>{HelperToPeruDate(time)}</sub>
               </Alert>
             </Col>
           </Row>

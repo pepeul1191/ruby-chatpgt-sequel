@@ -10,3 +10,9 @@
 .saveButton{
   margin-left: 10px;
 }
+
+.link{
+  position: relative;
+  float: left;
+  color: var(--bs-table-color-state,var(--bs-table-color-type,var(--bs-table-color)));
+}

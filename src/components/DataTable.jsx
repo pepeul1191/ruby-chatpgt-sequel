@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import 'font-awesome/css/font-awesome.min.css';
 import './DataTable.css';
 
@@ -346,7 +347,7 @@ class DataTable extends Component {
                     {rowButtons.map((button, colIndex) => {
                       if (button.type === 'delete') {
                         return (
-                          <i key={colIndex} className="fa fa-times hover" style={button.style} aria-hidden="true" onClick={(e) => this.deleteRow(e)}></i>
+                          <i key={colIndex} className="fa fa-times hover link" style={button.style} aria-hidden="true" onClick={(e) => this.deleteRow(e)}></i>
                         );
                       } else if (button.type === 'custom') {
                         return (
@@ -354,7 +355,9 @@ class DataTable extends Component {
                         );
                       } else if (button.type === 'link') {
                         return (
-                          <i key={colIndex} className="fa fa-times" style={button.style} aria-hidden="true"></i>
+                          <Link to={`${button.url}${record[button.record_id]}`} key={colIndex} className="link" exact="true">
+                            <i className="fa fa-search" style={button.style} aria-hidden="true"></i>
+                          </Link>
                         );
                       }
                     })}
