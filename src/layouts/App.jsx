@@ -7,6 +7,7 @@ import About from '../pages/app/About';
 import Contact from '../pages/app/Contact';
 import ConversationList from '../pages/app/ConversationList';
 import Conversation from '../pages/app/Conversation';
+import Conversation2 from '../pages/app/Conversation2';
 import MyModalComponent from '../components/MyModalComponent';
 import '../assets/css/app.css'; 
 import { Container } from 'react-bootstrap';

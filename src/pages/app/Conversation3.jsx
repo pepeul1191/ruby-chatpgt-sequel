@@ -51,11 +51,25 @@ class Conversation extends Component {
     sendQuestion(question, conversationId, conversationName)
       .then(responseData => {
         const newConversationEntryRef = createRef();
+        const newConversationEntry = (
+          <ConversationEntry 
+            ref={newConversationEntryRef} 
+            key={conversationEntries.length} 
+            columns={responseData.data.columns}
+            resultSet={responseData.data.result_set}
+            pagination={(responseData.data.result_set.length > 10 ? 
+              { show: true, numberPages: Math.ceil(responseData.data.result_set.length / 10) } : 
+              { show: false } 
+            )}
+          />
+        );
+        console.log(newConversationEntry)
         this.setState((prevState) => ({
-          conversationEntries: [...prevState.conversationEntries, { ref: newConversationEntryRef, data: responseData.data }],
+          conversationEntries: [...prevState.conversationEntries, { ref: newConversationEntryRef, component: newConversationEntry }],
         }), () => {
           setTimeout(() => {
-            newConversationEntryRef.current.setRows();
+            console.log(newConversationEntryRef.current);
+            newConversationEntryRef.current.setRows()
           }, 0);
         });
       })
@@ -110,16 +124,9 @@ class Conversation extends Component {
         </Row>
         {/* answers */}
         {conversationEntries.map((entry, index) => (
-          <ConversationEntry 
-            ref={entry.ref} 
-            key={index} 
-            columns={entry.data.columns}
-            resultSet={entry.data.result_set}
-            pagination={(entry.data.result_set.length > 10 ? 
-              { show: true, numberPages: Math.ceil(entry.data.result_set.length / 10), page: 1, step: 10, offset: 0 } : 
-              { show: false } 
-            )}
-          />
+          <React.Fragment key={index}>
+            {entry.component}
+          </React.Fragment>
         ))}
         {/* form question */}
         <Row>

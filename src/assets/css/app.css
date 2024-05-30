@@ -11,7 +11,8 @@ input.form-control,
 input[type="password"].form-control, 
 input[type="email"].form-control,
 .input-group-text,
-.modal-content { 
+.modal-content,
+.alert { 
   border-radius: 0px;
 }
 
