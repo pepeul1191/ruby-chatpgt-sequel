@@ -199,7 +199,7 @@ class ConversationEntry extends Component {
                     {question}
                   </Col>
                   <Col sm={4} style={{textAlign: 'right', }}>
-                    La consulta generó {resultSet.length} registros <i class="fa fa-cog" aria-hidden="true" style={{marginLeft:'5px'}}></i><br />
+                    La consulta generó {resultSet.length} registros <i className="fa fa-cog" aria-hidden="true" style={{marginLeft:'5px'}}></i><br />
                     <sub>{HelperToPeruDate(time)}</sub>
                   </Col>
                 </Row>

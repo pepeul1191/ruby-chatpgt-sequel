@@ -10,6 +10,7 @@ class Conversation extends Component {
     document.title = 'Nueva Conversación';
     super(props);
     this.state = {
+      actualQuestionIndex: 0,
       question: '',
       message: '',
       name: 'Nueva conversación',
@@ -39,6 +40,7 @@ class Conversation extends Component {
         this.setState({ 
           conversationEntries: entries,
           name: responseData.data.name, 
+          actualQuestionIndex: responseData.data.messages.length - 1,
         }, () => {
           this.state.conversationEntries.forEach(entry => {
             entry.ref.current.setRows(); // Suponiendo que entry.ref es una referencia React
@@ -63,10 +65,13 @@ class Conversation extends Component {
           });
         }, 1500);
       });
+    if (this.questionInputRef.current) {
+      this.questionInputRef.current.focus();
+    }
   }
 
   sendMessageClick = () => {
-    const { question, conversationId, name, conversationEntries } = this.state;
+    const { question, conversationId, name, conversationEntries, actualQuestionIndex } = this.state;
     const conversationName = name === 'Nueva conversación' ? question : name;
     sendQuestion(question, conversationId, conversationName)
       .then(responseData => {
@@ -80,10 +85,15 @@ class Conversation extends Component {
               question: question,
               time: responseData.time, 
             }],
+          actualQuestionIndex: actualQuestionIndex + 1,
+          question: '',
         }), () => {
           setTimeout(() => {
             newConversationEntryRef.current.setRows();
           }, 0);
+          if (this.questionInputRef.current) {
+            this.questionInputRef.current.focus();
+          }
         });
       })
       .catch(error => {
@@ -133,9 +143,40 @@ class Conversation extends Component {
   }
 
   handleKeyDown = (e) => {
-    const { conversationEntries } = this.state;
-    if (e.key === 'ArrowUp') {
+    const { conversationEntries, actualQuestionIndex } = this.state;
+    if (e.key == 'ArrowUp') {
       console.log(conversationEntries)
+      if((actualQuestionIndex - 1) > 0){
+        //console.log(actualQuestionIndex)
+        this.setState({ 
+          actualQuestionIndex: actualQuestionIndex - 1
+        }, () => {
+          console.log(conversationEntries);
+          const prevQuestion = conversationEntries[this.state.actualQuestionIndex].question;
+          this.setState({ 
+            question: prevQuestion
+          });
+        });
+      }
+    }else if(e.key == 'ArrowDown') {
+      if((actualQuestionIndex + 1) < conversationEntries.length){
+        //console.log(actualQuestionIndex);
+        this.setState({ 
+          actualQuestionIndex: actualQuestionIndex + 1
+        }, () => {
+          console.log(conversationEntries);
+          const nextQuestion = conversationEntries[this.state.actualQuestionIndex].question;
+          this.setState({ 
+            question: nextQuestion
+          });
+        });
+      }else if((actualQuestionIndex + 1) == conversationEntries.length){
+        this.setState({ 
+          question: ''
+        });
+      }
+    }else if(e.key == 'Entrer'){
+      this.sendMessageClick();
     }
   }
 

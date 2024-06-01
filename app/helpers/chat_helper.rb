@@ -4,7 +4,7 @@ require 'dotenv/load'
 module Helpers
   module ChatHelper
     extend self
-    def ask_chatgpt(question)
+    def ask_chatgpt2(question)
       resp = {
         status: 'error',
         message: '',
@@ -74,7 +74,7 @@ module Helpers
       return resp
     end
 
-    def ask_chatgpt2(question)
+    def ask_chatgpt(question)
       resp = {
         status: 'error',
         message: '',
