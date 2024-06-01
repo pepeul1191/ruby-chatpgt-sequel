@@ -34,7 +34,7 @@ class ConversationEntry extends Component {
 
   setRows() {
     const { pagination, resultSet, } = this.state;
-    console.log(this.state);
+    //console.log(this.state);
     if(pagination.show){
       this.setState({
         rows: resultSet.slice((pagination.page - 1) * pagination.step, pagination.page * pagination.step)
@@ -192,9 +192,17 @@ class ConversationEntry extends Component {
           <>
           <Row>
             <Col>
-              <Alert variant="info" className="my-custom-class">
-                La pregunta <b>{question}</b>; trajo <b>{resultSet.length}</b> registros<br />
-                <sub>{HelperToPeruDate(time)}</sub>
+              <Alert variant="success" className="">
+                <Row>
+                  <Col sm={8} style={{textAlign: 'left', }}>
+                    <i className="fa fa-user" aria-hidden="true" style={{marginRight:'10px'}}></i>
+                    {question}
+                  </Col>
+                  <Col sm={4} style={{textAlign: 'right', }}>
+                    La consulta generó {resultSet.length} registros <i class="fa fa-cog" aria-hidden="true" style={{marginLeft:'5px'}}></i><br />
+                    <sub>{HelperToPeruDate(time)}</sub>
+                  </Col>
+                </Row>
               </Alert>
             </Col>
           </Row>
@@ -221,20 +229,29 @@ class ConversationEntry extends Component {
                   <tr>
                     <td colSpan="20">
                       <Row>
-                        <Col sm={7}>
+                        <Col sm={8}>
                           <Button variant="secondary" id="button-send" onClick={this.changeReport} style={{ marginRight: '10px' }} >
-                            <i className="fa fa-line-chart" aria-hidden="true" style={{marginRight:'5px'}}></i>Cambiar Vista
+                            <i className="fa fa-line-chart" aria-hidden="true" style={{marginRight:'5px'}}></i>Presentación
                           </Button>
                           <Button variant="secondary" id="button-send" onClick={this.shareReport} style={{ marginRight: '10px' }} >
                             <i className="fa fa-share-alt" aria-hidden="true" style={{marginRight:'5px'}}></i>Compartir
                           </Button>
                           <Button variant="secondary" id="button-send" onClick={this.downloadReport} style={{ marginRight: '10px' }} >
+                            <i className="fa fa-exclamation-triangle" aria-hidden="true" style={{marginRight:'5px'}}></i>Alerta
+                          </Button>
+                          <Button variant="secondary" id="button-send" onClick={this.downloadReport} style={{ marginRight: '10px' }} >
                             <i className="fa fa-download" aria-hidden="true" style={{marginRight:'5px'}}></i>Descargar
+                          </Button>
+                          <Button variant="warning" id="button-send" onClick={this.downloadReport} style={{ marginRight: '10px' }} >
+                            <i className="fa fa-code" aria-hidden="true" style={{marginRight:'5px'}}></i>Editar
+                          </Button>
+                          <Button variant="danger" id="button-send" onClick={this.downloadReport} style={{ marginRight: '10px' }} >
+                            <i className="fa fa-times" aria-hidden="true" style={{marginRight:'5px'}}></i>Eliminar
                           </Button>
                         </Col>
                         {pagination.show ? (
                           <>
-                            <Col sm={5} style={{textAlign: 'right', }}>
+                            <Col sm={4} style={{textAlign: 'right', }}>
                               <Form.Group as={Form.Row} className="align-items-center" style={{display: 'inline-block', marginRight: '10px'}}>
                                 <Form.Label column style={{position: 'relative', float: 'left', marginRight: '10px'}}>Filas por página:</Form.Label>
                                 <Form.Control as="select" onChange={this.handleStepChange} value={pagination.step} style={{width: '65px', }}>
@@ -279,10 +296,28 @@ class ConversationEntry extends Component {
           </Modal.Header>
           <Modal.Body>
             <Form.Group controlId="formBasicEmail">
-              <Form.Label>Correo(s):</Form.Label>
+              <Form.Label>Asunto</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="..."
+                value={email}
+                onChange={(e) => this.setState({ email: e.target.value })}
+                ref={this.emailInputRef}
+              />
+              <Form.Label>Correo(s)</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Si son varios sepárelos con un punto y coma (;)"
+                value={email}
+                onChange={(e) => this.setState({ email: e.target.value })}
+                ref={this.emailInputRef}
+              />
+              <Form.Label>Mensaje</Form.Label>
+              <Form.Control
+                type="text"
+                as="textarea" 
+                rows={3} 
+                placeholder="..."
                 value={email}
                 onChange={(e) => this.setState({ email: e.target.value })}
                 ref={this.emailInputRef}

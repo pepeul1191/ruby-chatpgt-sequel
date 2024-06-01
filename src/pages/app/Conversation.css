@@ -1,0 +1,24 @@
+.conversation-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; 
+  margin-top: -70px;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.messages{
+  padding-bottom: 135px;
+  padding-top: 75px;
+}
+
+.question-row{
+  background: white;
+  padding-top: 15px;
+  padding-bottom: 23px;
+  border-top: 1px solid #dee2e6;
+}

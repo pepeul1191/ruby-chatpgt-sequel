@@ -1,7 +1,9 @@
 import React, { Component, createRef } from 'react';
-import { InputGroup, FormControl, Row, Col, Button } from 'react-bootstrap';
+import { InputGroup, FormControl, Row, Col, Button, Container } from 'react-bootstrap';
 import { sendQuestion, fetchConverstaion, updateName } from '../../services/ChatService';
 import ConversationEntry from '../../components/ConversationEntry';
+import Footer from '../../components/Footer';
+import './Conversation.css';
 
 class Conversation extends Component {
   constructor(props) {
@@ -24,7 +26,7 @@ class Conversation extends Component {
     fetchConverstaion(conversationId)
       .then(responseData => {
         let conversations = responseData.data.messages;
-        console.log(conversations);
+        // console.log(conversations);
         const entries = conversations.map(conversation => {
           const { answer, ...rest } = conversation;
           return {
@@ -130,63 +132,83 @@ class Conversation extends Component {
       });
   }
 
+  handleKeyDown = (e) => {
+    const { conversationEntries } = this.state;
+    if (e.key === 'ArrowUp') {
+      console.log(conversationEntries)
+    }
+  }
+
   render() {
     const { conversationEntries, question, name } = this.state;
  
     return (
       <>
-        {/* form name */}
-        <Row>
-          <Col>
-            <InputGroup className="mb-3">
-              <InputGroup.Text>Nombre de la Conversación</InputGroup.Text>
-              <FormControl
-                placeholder="Cuál es su pregunta?"
-                aria-label="Cuál es su pregunta?"
-                aria-describedby="button-send"
-                value={name}
-                onChange={(e) => this.setState({ name: e.target.value })}
-                ref={this.nameInputRef}
+        <div className="conversation-container">
+          <Container className="messages">
+            {/* form name */}
+            <Row>
+              <Col>
+                <InputGroup className="mb-3">
+                  <InputGroup.Text>Nombre de la Conversación</InputGroup.Text>
+                  <FormControl
+                    placeholder="Cuál es su pregunta?"
+                    aria-label="Cuál es su pregunta?"
+                    aria-describedby="button-send"
+                    value={name}
+                    onChange={(e) => this.setState({ name: e.target.value })}
+                    ref={this.nameInputRef}
+                  />
+                  <Button variant="success" id="button-send" onClick={this.updateNameClick} style={{ width: '120px' }} >
+                    <i className="fa fa-check" aria-hidden="true" style={{marginRight:'5px'}}></i>Guardar
+                  </Button>
+                </InputGroup>
+              </Col>
+            </Row>
+            {/* answers */}
+            {conversationEntries.map((entry, index) => (
+              <ConversationEntry 
+                ref={entry.ref} 
+                key={index} 
+                question={entry.question}
+                columns={entry.data.columns}
+                resultSet={entry.data.result_set}
+                time={entry.time}
+                pagination={(entry.data.result_set.length > 10 ? 
+                  { show: true, numberPages: Math.ceil(entry.data.result_set.length / 10), page: 1, step: 10, offset: 0 } : 
+                  { show: false } 
+                )}
               />
-              <Button variant="success" id="button-send" onClick={this.updateNameClick} style={{ width: '120px' }} >
-                <i className="fa fa-check" aria-hidden="true" style={{marginRight:'5px'}}></i>Guardar
-              </Button>
-            </InputGroup>
-          </Col>
-        </Row>
-        {/* answers */}
-        {conversationEntries.map((entry, index) => (
-          <ConversationEntry 
-            ref={entry.ref} 
-            key={index} 
-            question={entry.question}
-            columns={entry.data.columns}
-            resultSet={entry.data.result_set}
-            time={entry.time}
-            pagination={(entry.data.result_set.length > 10 ? 
-              { show: true, numberPages: Math.ceil(entry.data.result_set.length / 10), page: 1, step: 10, offset: 0 } : 
-              { show: false } 
-            )}
-          />
-        ))}
+            ))}
+          </Container>
+        </div>
         {/* form question */}
-        <Row>
-          <Col>
-            <InputGroup className="mb-3">
-              <FormControl
-                placeholder="Cuál es su pregunta?"
-                aria-label="Cuál es su pregunta?"
-                aria-describedby="button-send"
-                value={question}
-                onChange={(e) => this.setState({ question: e.target.value })}
-                ref={this.questionInputRef}
-              />
-              <Button variant="primary" id="button-send" onClick={this.sendMessageClick} style={{ width: '120px' }} >
-                <i className="fa fa-paper-plane-o" aria-hidden="true" style={{marginRight:'5px'}}></i>Enviar
-              </Button>
-            </InputGroup>
-          </Col>
-        </Row>
+        <footer>
+          <div className='question-row'>
+            <Container>
+              <Row>
+                <Col>
+                  <InputGroup className="mb-5">
+                    <FormControl
+                      placeholder="Cuál es su pregunta?"
+                      aria-label="Cuál es su pregunta?"
+                      aria-describedby="button-send"
+                      value={question}
+                      onChange={(e) => this.setState({ question: e.target.value })}
+                      ref={this.questionInputRef}
+                      onKeyDown={this.handleKeyDown}
+                    />
+                    <Button variant="primary" id="button-send" onClick={this.sendMessageClick} style={{ width: '120px' }} >
+                      <i className="fa fa-paper-plane-o" aria-hidden="true" style={{marginRight:'5px'}}></i>Enviar
+                    </Button>
+                  </InputGroup>
+                </Col>
+              </Row>
+            </Container>
+          </div>
+          {/* footer */}
+          <Footer />
+        </footer>
       </>
     );
   }
