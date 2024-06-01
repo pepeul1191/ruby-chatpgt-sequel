@@ -1,6 +1,6 @@
 import React, { Component, createRef } from 'react';
 import { InputGroup, FormControl, Row, Col, Button } from 'react-bootstrap';
-import { sendQuestion, fetchConverstaion } from '../../services/ChatService';
+import { sendQuestion, fetchConverstaion, updateName } from '../../services/ChatService';
 import ConversationEntry from '../../components/ConversationEntry';
 
 class Conversation extends Component {
@@ -35,7 +35,8 @@ class Conversation extends Component {
           };
         });
         this.setState({ 
-          conversationEntries: entries, 
+          conversationEntries: entries,
+          name: responseData.data.name, 
         }, () => {
           this.state.conversationEntries.forEach(entry => {
             entry.ref.current.setRows(); // Suponiendo que entry.ref es una referencia React
@@ -104,8 +105,29 @@ class Conversation extends Component {
   }
 
   updateNameClick = () => {
-    const { name } = this.state;
-    console.log(name);
+    const { name, conversationId } = this.state;
+    updateName(conversationId, name)
+      .then(responseData => {
+        console.log(responseData);
+      })
+      .catch(error => {
+        console.error(error);
+        this.setState({ 
+          message: 'Ocurrió un error al validar el usuario',
+          messageClass: 'text-danger' 
+        });
+        setTimeout(() => {
+          this.setState({ 
+            message: '', 
+            messageClass: '' 
+          });
+        }, 5000);
+        setTimeout(() => {
+          this.setState({ 
+            disabled: false, 
+          });
+        }, 1500);
+      });
   }
 
   render() {

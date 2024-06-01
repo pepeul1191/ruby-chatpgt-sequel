@@ -1,6 +1,33 @@
 require 'json'
 
 class ChatController < ApplicationController
+  post '/chat/update-name' do
+    resp = {
+      status: 'error',
+      message: '',
+      data: '',
+    }
+    begin
+      request_body = JSON.parse(request.body.read)
+      conversation_id = request_body['_id']
+      name = request_body['name']
+      _id = BSON::ObjectId(conversation_id)      
+      conversation = Conversation.find(_id)
+      if conversation.nil?
+        resp[:message] = 'No se encontró conversación'
+        resp[:data] = nil
+      else
+        conversation.update(name: name)
+      end
+      resp[:status] = 'success'
+    rescue => e
+      puts e.message
+      resp[:message] = 'Ocurrió un error al buscar la conversación',
+      resp[:data] = e.message
+    end
+    resp.to_json
+  end
+
   post '/chat/send-question' do
     # params
     request_body = JSON.parse(request.body.read)
@@ -39,7 +66,7 @@ class ChatController < ApplicationController
       conversation.save
     else # update
       conversation.updated_at = Time.now
-      conversation.name = conversation_name
+      # conversation.name = conversation_name
       conversation.messages = conversation.messages.to_a << message
       conversation.save
     end

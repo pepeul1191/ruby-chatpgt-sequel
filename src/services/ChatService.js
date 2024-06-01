@@ -29,6 +29,34 @@ export const sendQuestion = (question, conversationId, conversationName) => {
     });
 };
 
+export const updateName = (conversationId, name) => {
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer yourAccessTokenHere',
+    },
+    body: JSON.stringify({
+      _id: conversationId,
+      name: name,
+    })
+  };
+  // do request
+  return fetch(`${BASE_URL}chat/update-name`, requestOptions)
+    .then(response => {
+      if (!response.ok) {
+        return response.text().then(errorText => {
+          console.error(response.status, errorText);
+          throw new Error('Ha ocurrido un error no controlado');
+        });
+      } 
+      return response.json();
+    })
+    .catch(error => {
+      throw error; // Re-lanzar el error para manejarlo en el componente
+    });
+};
+
 export const fetchConverstaion = (converstionId) => {
   const requestOptions = {
     method: 'GET',
