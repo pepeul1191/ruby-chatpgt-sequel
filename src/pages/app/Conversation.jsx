@@ -13,7 +13,7 @@ class Conversation extends Component {
       name: 'Nueva conversación',
       messageClass: '',
       conversationId: window.location.href.split('/').pop(),
-      conversationEntries: []
+      conversationEntries: [] // {ref: newConversationEntryRef,  data: responseData.data, question: question, time: responseData.time,  }
     };
     this.questionInputRef = React.createRef();
     this.nameInputRef = React.createRef();
@@ -23,7 +23,24 @@ class Conversation extends Component {
     const { conversationId } = this.state;
     fetchConverstaion(conversationId)
       .then(responseData => {
-        console.log(responseData);
+        let conversations = responseData.data.messages;
+        console.log(conversations);
+        const entries = conversations.map(conversation => {
+          const { answer, ...rest } = conversation;
+          return {
+            ...rest,
+            data: conversation.answer,
+            ref: React.createRef(),
+            time: conversation.created_at,
+          };
+        });
+        this.setState({ 
+          conversationEntries: entries, 
+        }, () => {
+          this.state.conversationEntries.forEach(entry => {
+            entry.ref.current.setRows(); // Suponiendo que entry.ref es una referencia React
+          });
+        });
       })
       .catch(error => {
         console.error(error);

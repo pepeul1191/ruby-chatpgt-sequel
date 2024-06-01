@@ -61,7 +61,7 @@ class ChatController < ApplicationController
     begin
       conversation_id = params['conversation_id']
       _id = BSON::ObjectId(conversation_id)
-      conversation = Conversation.find(_id)
+      conversation = Conversation.fetch_one(_id)
       if conversation.nil?
         resp[:message] = 'No se encontró conversación'
         resp[:data] = nil
